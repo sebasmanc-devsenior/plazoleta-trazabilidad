@@ -1,0 +1,52 @@
+package com.plazoleta.traceability.infrastructure.input.rest;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.plazoleta.traceability.application.dto.OrderLogResponse;
+import com.plazoleta.traceability.application.dto.RecordOrderLogCommand;
+import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
+import com.plazoleta.traceability.infrastructure.input.rest.exceptionhandler.UnauthorizedException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+/** Ruta entre microservicios: solo la llama restaurantes, con el token interno. */
+@RestController
+@RequestMapping("/internal/order-logs")
+@Tag(name = "Order logs")
+public class InternalOrderLogController {
+    private final RecordOrderLogUseCase recordOrderLogUseCase;
+    private final String internalToken;
+
+    public InternalOrderLogController(RecordOrderLogUseCase recordOrderLogUseCase,
+                                      @Value("${app.internal.token}") String internalToken) {
+        this.recordOrderLogUseCase = recordOrderLogUseCase;
+        this.internalToken = internalToken;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "HU-17 Record an order status change",
+            description = "Internal route. Needs the header Authorization: Bearer <internal token>.")
+    public OrderLogResponse record(@RequestBody RecordOrderLogCommand command,
+                                   @RequestHeader(name = "Authorization", required = false) String authorization) {
+        String supplied = authorization != null && authorization.startsWith("Bearer ")
+                ? authorization.substring(7) : "";
+        if (internalToken == null || internalToken.isBlank()
+                || !MessageDigest.isEqual(internalToken.getBytes(StandardCharsets.UTF_8),
+                        supplied.getBytes(StandardCharsets.UTF_8))) {
+            throw new UnauthorizedException("Invalid service credentials");
+        }
+        return recordOrderLogUseCase.execute(command);
+    }
+}
