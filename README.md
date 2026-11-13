@@ -2,7 +2,7 @@
 
 Microservicio que guarda el historial de cambios de estado de cada pedido (HU 17). El microservicio de
 restaurantes le avisa cada vez que un pedido cambia de estado, y el cliente consulta aquí el historial de
-sus pedidos.
+sus pedidos. El propietario consulta aquí la eficiencia de los pedidos de su restaurante (HU 18).
 
 - **Puerto:** 8083
 - **Base de datos:** MongoDB (`plazoleta_trazabilidad`, colección `order_logs`)
@@ -13,6 +13,7 @@ sus pedidos.
 | HU | Qué hace | Rama |
 | --- | --- | --- |
 | 17 | Registrar cada cambio de estado de un pedido y consultar el historial de los pedidos propios | `historia17-consultar-trazabilidad` |
+| 18 | Eficiencia: tiempo de cada pedido entregado (de PENDIENTE a ENTREGADO) y ranking de empleados por tiempo medio | `historia18-eficiencia-pedidos` |
 
 ## Endpoints
 
@@ -20,6 +21,7 @@ sus pedidos.
 | --- | --- | --- |
 | POST | `/internal/order-logs` | El microservicio de restaurantes, con `Authorization: Bearer <token interno>` |
 | GET | `/api/orders/{orderId}/logs` | Un CLIENTE, con su JWT; solo de sus propios pedidos |
+| GET | `/api/restaurants/{restaurantId}/efficiency` | El PROPIETARIO de ese restaurante, con su JWT |
 
 Registro que envía restaurantes:
 
@@ -42,21 +44,29 @@ Historial que ve el cliente, del cambio más antiguo al más reciente:
 Respuestas del historial: 200, 401 (sin token o token inválido), 403 (no es cliente, o el pedido es de otro
 cliente), 404 (el pedido no tiene registros), 503 (MongoDB no responde).
 
+Eficiencia (HU 18): solo cuentan los pedidos entregados; el tiempo va desde que el cliente crea el pedido
+(`PENDIENTE`) hasta que se entrega (`ENTREGADO`). El ranking ordena a los empleados del menor al mayor tiempo
+medio. Para confirmar que quien consulta es el dueño, este servicio llama a restaurantes
+(`GET /internal/restaurants/{id}` con el token interno). Respuestas: 200, 401, 403 (no es propietario, o el
+restaurante es de otro), 404 (el restaurante no existe), 503 (restaurantes o MongoDB no responden).
+
 ## Arquitectura hexagonal (arquetipo del curso)
 
 ```
 com.plazoleta.traceability
 ├── domain
-│   ├── model        OrderLog (valida el registro)
-│   └── exception    OrderLogsNotFoundException, ForbiddenOperationException
+│   ├── model        OrderLog (valida el registro), OrderEfficiency, EmployeeEfficiency (cálculo de la HU 18)
+│   └── exception    OrderLogsNotFoundException, ForbiddenOperationException, RestaurantNotFoundException,
+│                    IntegrationUnavailableException
 ├── application
-│   ├── port/input   RecordOrderLogUseCase, GetOrderLogsUseCase
-│   ├── port/output  OrderLogRepositoryPort
-│   ├── service      RecordOrderLogService, GetOrderLogsService
-│   └── dto          RecordOrderLogCommand, OrderLogResponse
+│   ├── port/input   RecordOrderLogUseCase, GetOrderLogsUseCase, GetRestaurantEfficiencyUseCase
+│   ├── port/output  OrderLogRepositoryPort, RestaurantDirectoryPort
+│   ├── service      RecordOrderLogService, GetOrderLogsService, GetRestaurantEfficiencyService
+│   └── dto          RecordOrderLogCommand, OrderLogResponse, RestaurantEfficiencyResponse, ...
 └── infrastructure
-    ├── input/rest   InternalOrderLogController, OrderLogController, exceptionhandler
+    ├── input/rest   InternalOrderLogController, OrderLogController, EfficiencyController, exceptionhandler
     ├── output/mongo document, repository, adapter (MongoDB)
+    ├── output/http  RemoteRestaurantDirectoryAdapter (dueño del restaurante)
     └── configuration BeanConfiguration, OpenApiConfiguration, security (lectura del JWT)
 ```
 

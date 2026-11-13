@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.plazoleta.traceability.domain.exception.ForbiddenOperationException;
+import com.plazoleta.traceability.domain.exception.IntegrationUnavailableException;
 import com.plazoleta.traceability.domain.exception.OrderLogsNotFoundException;
+import com.plazoleta.traceability.domain.exception.RestaurantNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -41,9 +43,16 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.FORBIDDEN, ex.getMessage(), request);
     }
 
-    @ExceptionHandler(OrderLogsNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(OrderLogsNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler({OrderLogsNotFoundException.class, RestaurantNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex, HttpServletRequest request) {
         return build(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(IntegrationUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleIntegration(IntegrationUnavailableException ex,
+                                                           HttpServletRequest request) {
+        log.warn("Integration unavailable at {}: {}", request.getRequestURI(), ex.getMessage());
+        return build(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), request);
     }
 
     @ExceptionHandler(DataAccessException.class)

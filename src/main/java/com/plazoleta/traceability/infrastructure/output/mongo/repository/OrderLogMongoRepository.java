@@ -8,4 +8,7 @@ import com.plazoleta.traceability.infrastructure.output.mongo.document.OrderLogD
 
 public interface OrderLogMongoRepository extends MongoRepository<OrderLogDocument, String> {
     List<OrderLogDocument> findByOrderIdOrderByChangedAtAsc(Long orderId);
+
+    /** HU-18 */
+    List<OrderLogDocument> findByRestaurantIdOrderByChangedAtAsc(Long restaurantId);
 }
