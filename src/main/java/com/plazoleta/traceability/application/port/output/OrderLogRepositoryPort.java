@@ -9,4 +9,7 @@ public interface OrderLogRepositoryPort {
 
     /** Registros de un pedido, del más antiguo al más reciente. */
     List<OrderLog> findByOrderId(Long orderId);
+
+    /** HU-18: registros de todos los pedidos de un restaurante, del más antiguo al más reciente. */
+    List<OrderLog> findByRestaurantId(Long restaurantId);
 }

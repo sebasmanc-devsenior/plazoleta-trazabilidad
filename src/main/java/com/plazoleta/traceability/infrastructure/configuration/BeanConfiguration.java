@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.plazoleta.traceability.application.port.input.GetOrderLogsUseCase;
+import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyUseCase;
 import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
 import com.plazoleta.traceability.application.port.output.OrderLogRepositoryPort;
+import com.plazoleta.traceability.application.port.output.RestaurantDirectoryPort;
 import com.plazoleta.traceability.application.service.GetOrderLogsService;
+import com.plazoleta.traceability.application.service.GetRestaurantEfficiencyService;
 import com.plazoleta.traceability.application.service.RecordOrderLogService;
 
 /** Conecta los casos de uso con sus adaptadores. */
@@ -30,5 +33,12 @@ public class BeanConfiguration {
     @Bean
     public GetOrderLogsUseCase getOrderLogsUseCase(OrderLogRepositoryPort logs) {
         return new GetOrderLogsService(logs);
+    }
+
+    /** HU-18 */
+    @Bean
+    public GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase(OrderLogRepositoryPort logs,
+                                                                         RestaurantDirectoryPort restaurants) {
+        return new GetRestaurantEfficiencyService(logs, restaurants);
     }
 }

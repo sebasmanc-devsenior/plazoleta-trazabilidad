@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 /** Documentación OpenAPI. El JWT se obtiene en users-service (POST /api/login) y se pega con "Authorize". */
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Plazoleta traceability API", version = "1.0",
-        description = "Order status history (HU 17). Get the token from users-service (POST /api/login)."))
+        description = "Order status history (HU 17) and order efficiency (HU 18). Get the token from users-service (POST /api/login)."))
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 public class OpenApiConfiguration {
 }

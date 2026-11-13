@@ -27,4 +27,10 @@ public class OrderLogMongoAdapter implements OrderLogRepositoryPort {
         return orderLogMongoRepository.findByOrderIdOrderByChangedAtAsc(orderId).stream()
                 .map(OrderLogDocument::toDomain).toList();
     }
+
+    @Override
+    public List<OrderLog> findByRestaurantId(Long restaurantId) {
+        return orderLogMongoRepository.findByRestaurantIdOrderByChangedAtAsc(restaurantId).stream()
+                .map(OrderLogDocument::toDomain).toList();
+    }
 }
