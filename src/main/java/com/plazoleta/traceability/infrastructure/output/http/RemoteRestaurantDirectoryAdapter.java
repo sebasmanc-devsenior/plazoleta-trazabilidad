@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.output.http;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import java.time.Duration;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,9 +20,16 @@ public class RemoteRestaurantDirectoryAdapter implements RestaurantDirectoryPort
     private final RestClient client;
     private final String internalToken;
 
-    public RemoteRestaurantDirectoryAdapter(@Value("${app.restaurants.base-url}") String baseUrl,
-                                            @Value("${app.internal.token}") String internalToken) {
-        this.client = RestClient.builder().baseUrl(baseUrl).build();
+    /** Constructor para las pruebas: usa los tiempos de espera por defecto. */
+    public RemoteRestaurantDirectoryAdapter(String baseUrl, String internalToken) {
+        this(baseUrl, internalToken, HttpClients.DEFAULT_CONNECT_TIMEOUT, HttpClients.DEFAULT_READ_TIMEOUT);
+    }
+
+    @Autowired
+    public RemoteRestaurantDirectoryAdapter(@Value("${app.restaurants.base-url}") String baseUrl, @Value("${app.internal.token}") String internalToken,
+            @Value("${app.http.connect-timeout:2s}") Duration connectTimeout,
+            @Value("${app.http.read-timeout:5s}") Duration readTimeout) {
+        this.client = HttpClients.restClient(baseUrl, connectTimeout, readTimeout);
         this.internalToken = internalToken;
     }
 
