@@ -98,7 +98,7 @@ class EfficiencyControllerTests {
     @Test
     void answers503WhenTheRestaurantsServiceIsDown() throws Exception {
         when(restaurantDirectoryPort.findOwnerId(1L))
-                .thenThrow(new IntegrationUnavailableException("Restaurants service is unavailable", null));
+                .thenThrow(new IntegrationUnavailableException("El servicio de restaurantes no está disponible", null));
 
         mockMvc.perform(get("/api/restaurants/1/efficiency").header("Authorization", token(2, "PROPIETARIO")))
                 .andExpect(status().isServiceUnavailable());
