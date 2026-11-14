@@ -17,10 +17,10 @@ public class OrderEfficiency {
 
     public OrderEfficiency(Long orderId, Long employeeId, LocalDateTime startedAt, LocalDateTime finishedAt) {
         if (orderId == null || startedAt == null || finishedAt == null) {
-            throw new IllegalArgumentException("Order, start and finish are required");
+            throw new IllegalArgumentException("El pedido, el inicio y el fin son obligatorios");
         }
         if (finishedAt.isBefore(startedAt)) {
-            throw new IllegalArgumentException("An order cannot finish before it starts");
+            throw new IllegalArgumentException("Un pedido no puede terminar antes de empezar");
         }
         this.orderId = orderId;
         this.employeeId = employeeId;

@@ -20,11 +20,11 @@ public class GetOrderLogsService implements GetOrderLogsUseCase {
     public List<OrderLogResponse> execute(Long orderId, Long clientId) {
         List<OrderLog> logs = orderLogRepositoryPort.findByOrderId(orderId);
         if (logs.isEmpty()) {
-            throw new OrderLogsNotFoundException("There are no logs for this order");
+            throw new OrderLogsNotFoundException("No hay registros para este pedido");
         }
         // Un cliente solo consulta el historial de sus propios pedidos.
         if (logs.stream().anyMatch(log -> !log.getClientId().equals(clientId))) {
-            throw new ForbiddenOperationException("The order belongs to another client");
+            throw new ForbiddenOperationException("El pedido pertenece a otro cliente");
         }
         return logs.stream().map(OrderLogResponse::from).toList();
     }
