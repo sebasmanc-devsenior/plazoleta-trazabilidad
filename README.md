@@ -94,3 +94,14 @@ colección `order_logs`.
 ```
 
 Las pruebas no necesitan MongoDB: el puerto de salida se reemplaza por un doble de prueba.
+
+## Cobertura de pruebas (JaCoCo)
+
+Al correr las pruebas se genera el reporte de cobertura:
+
+```powershell
+.\mvnw.cmd test
+```
+
+El reporte queda en `target/site/jacoco/index.html` (ábrelo en el navegador). Muestra qué porcentaje de
+instrucciones y de ramas del código ejecutan las pruebas, por paquete y por clase.
