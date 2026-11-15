@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.plazoleta.traceability.application.port.output.OrderLogRepositoryPort;
 import com.plazoleta.traceability.domain.model.OrderLog;
-import com.plazoleta.traceability.infrastructure.output.mongo.document.OrderLogDocument;
+import com.plazoleta.traceability.infrastructure.output.mongo.mapper.OrderLogDocumentMapper;
 import com.plazoleta.traceability.infrastructure.output.mongo.repository.OrderLogMongoRepository;
 
 @Repository
@@ -19,18 +19,18 @@ public class OrderLogMongoAdapter implements OrderLogRepositoryPort {
 
     @Override
     public OrderLog save(OrderLog log) {
-        return orderLogMongoRepository.save(OrderLogDocument.fromDomain(log)).toDomain();
+        return OrderLogDocumentMapper.toDomain(orderLogMongoRepository.save(OrderLogDocumentMapper.toDocument(log)));
     }
 
     @Override
     public List<OrderLog> findByOrderId(Long orderId) {
         return orderLogMongoRepository.findByOrderIdOrderByChangedAtAsc(orderId).stream()
-                .map(OrderLogDocument::toDomain).toList();
+                .map(OrderLogDocumentMapper::toDomain).toList();
     }
 
     @Override
     public List<OrderLog> findByRestaurantId(Long restaurantId) {
         return orderLogMongoRepository.findByRestaurantIdOrderByChangedAtAsc(restaurantId).stream()
-                .map(OrderLogDocument::toDomain).toList();
+                .map(OrderLogDocumentMapper::toDomain).toList();
     }
 }

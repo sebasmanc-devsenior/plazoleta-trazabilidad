@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.plazoleta.traceability.domain.model.OrderLog;
 
 /** HU-17: documento de la colección order_logs en MongoDB. */
 @Document(collection = "order_logs")
@@ -21,23 +20,6 @@ public class OrderLogDocument {
     private LocalDateTime changedAt;
 
     public OrderLogDocument() {
-    }
-
-    public static OrderLogDocument fromDomain(OrderLog log) {
-        OrderLogDocument document = new OrderLogDocument();
-        document.id = log.getId();
-        document.orderId = log.getOrderId();
-        document.clientId = log.getClientId();
-        document.restaurantId = log.getRestaurantId();
-        document.employeeId = log.getEmployeeId();
-        document.previousStatus = log.getPreviousStatus();
-        document.newStatus = log.getNewStatus();
-        document.changedAt = log.getChangedAt();
-        return document;
-    }
-
-    public OrderLog toDomain() {
-        return new OrderLog(id, orderId, clientId, restaurantId, employeeId, previousStatus, newStatus, changedAt);
     }
 
     public String getId() { return id; }
