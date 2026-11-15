@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.input.rest;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,9 +42,9 @@ public class EfficiencyController {
     public RestaurantEfficiencyResponse getEfficiency(@PathVariable Long restaurantId,
             @Parameter(hidden = true) @RequestHeader(name = "Authorization", required = false) String authorization) {
         AuthenticatedUser user = jwtTokenReader.read(authorization)
-                .orElseThrow(() -> new UnauthorizedException("Se requiere un token válido"));
+                .orElseThrow(() -> new UnauthorizedException(MensajesError.REQUIERE_UN_TOKEN_VALIDO));
         if (!"PROPIETARIO".equals(user.role())) {
-            throw new ForbiddenOperationException("Solo el propietario puede ver la eficiencia de un restaurante");
+            throw new ForbiddenOperationException(MensajesError.SOLO_EL_PROPIETARIO_PUEDE_VER_LA_EFICIENCIA);
         }
         return getRestaurantEfficiencyUseCase.execute(restaurantId, user.userId());
     }

@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.output.http;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.Duration;
 import java.util.Optional;
@@ -44,10 +46,10 @@ public class RemoteRestaurantDirectoryAdapter implements RestaurantDirectoryPort
             if (ex.getStatusCode().value() == 404) {
                 return Optional.empty();
             }
-            throw new IntegrationUnavailableException("El servicio de restaurantes rechazó la consulta (HTTP "
+            throw new IntegrationUnavailableException(MensajesError.SERVICIO_DE_RESTAURANTES_RECHAZO_LA_CONSULTA_HTTP
                     + ex.getStatusCode().value() + ")", ex);
         } catch (RestClientException ex) {
-            throw new IntegrationUnavailableException("El servicio de restaurantes no está disponible", ex);
+            throw new IntegrationUnavailableException(MensajesError.SERVICIO_DE_RESTAURANTES_NO_ESTA_DISPONIBLE, ex);
         }
     }
 

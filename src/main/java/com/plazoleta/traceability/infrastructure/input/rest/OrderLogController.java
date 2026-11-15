@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.input.rest;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +41,9 @@ public class OrderLogController {
     public List<OrderLogResponse> getOrderLogs(@PathVariable Long orderId,
             @Parameter(hidden = true) @RequestHeader(name = "Authorization", required = false) String authorization) {
         AuthenticatedUser user = jwtTokenReader.read(authorization)
-                .orElseThrow(() -> new UnauthorizedException("Se requiere un token válido"));
+                .orElseThrow(() -> new UnauthorizedException(MensajesError.REQUIERE_UN_TOKEN_VALIDO));
         if (!"CLIENTE".equals(user.role())) {
-            throw new ForbiddenOperationException("Solo un cliente puede ver el historial de un pedido");
+            throw new ForbiddenOperationException(MensajesError.SOLO_UN_CLIENTE_PUEDE_VER_EL_HISTORIAL);
         }
         return getOrderLogsUseCase.execute(orderId, user.userId());
     }

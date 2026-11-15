@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.application.service;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.time.Clock;
 import java.time.LocalDateTime;
 
@@ -21,7 +23,7 @@ public class RecordOrderLogService implements RecordOrderLogUseCase {
     @Override
     public OrderLogResponse execute(RecordOrderLogCommand command) {
         if (command == null) {
-            throw new IllegalArgumentException("El cuerpo de la petición es obligatorio");
+            throw new IllegalArgumentException(MensajesError.CUERPO_DE_LA_PETICION_ES_OBLIGATORIO);
         }
         // La fecha la pone este servicio al recibir el cambio: todos los registros usan el mismo reloj.
         OrderLog log = new OrderLog(null, command.getOrderId(), command.getClientId(), command.getRestaurantId(),

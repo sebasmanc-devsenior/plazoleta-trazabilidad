@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.input.rest;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -45,7 +47,7 @@ public class InternalOrderLogController {
         if (internalToken == null || internalToken.isBlank()
                 || !MessageDigest.isEqual(internalToken.getBytes(StandardCharsets.UTF_8),
                         supplied.getBytes(StandardCharsets.UTF_8))) {
-            throw new UnauthorizedException("Credenciales de servicio inválidas");
+            throw new UnauthorizedException(MensajesError.CREDENCIALES_DE_SERVICIO_INVALIDAS);
         }
         return recordOrderLogUseCase.execute(command);
     }

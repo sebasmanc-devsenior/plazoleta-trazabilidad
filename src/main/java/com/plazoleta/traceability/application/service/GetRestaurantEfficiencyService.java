@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.application.service;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -33,9 +35,9 @@ public class GetRestaurantEfficiencyService implements GetRestaurantEfficiencyUs
     public RestaurantEfficiencyResponse execute(Long restaurantId, Long ownerId) {
         // Conexión con el microservicio de restaurantes: solo el dueño ve la eficiencia de su restaurante.
         Long realOwnerId = restaurantDirectoryPort.findOwnerId(restaurantId)
-                .orElseThrow(() -> new RestaurantNotFoundException("El restaurante no existe"));
+                .orElseThrow(() -> new RestaurantNotFoundException(MensajesError.RESTAURANTE_NO_EXISTE));
         if (!realOwnerId.equals(ownerId)) {
-            throw new ForbiddenOperationException("El restaurante pertenece a otro propietario");
+            throw new ForbiddenOperationException(MensajesError.RESTAURANTE_PERTENECE_A_OTRO_PROPIETARIO);
         }
 
         // Criterio 1: tiempo de cada pedido entregado, desde PENDIENTE hasta ENTREGADO.

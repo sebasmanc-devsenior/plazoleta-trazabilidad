@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.infrastructure.input.rest.exceptionhandler;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.time.Instant;
 
 import org.slf4j.Logger;
@@ -30,7 +32,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponse> handleMalformed(Exception ex, HttpServletRequest request) {
-        return build(HttpStatus.BAD_REQUEST, "La petición está mal formada", request);
+        return build(HttpStatus.BAD_REQUEST, MensajesError.PETICION_ESTA_MAL_FORMADA, request);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
@@ -58,7 +60,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse> handleDatabase(DataAccessException ex, HttpServletRequest request) {
         log.warn("MongoDB is unavailable at {}: {}", request.getRequestURI(), ex.getMessage());
-        return build(HttpStatus.SERVICE_UNAVAILABLE, "La base de datos de trazabilidad no está disponible", request);
+        return build(HttpStatus.SERVICE_UNAVAILABLE, MensajesError.BASE_DE_DATOS_DE_TRAZABILIDAD_NO_ESTA, request);
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request) {
