@@ -59,16 +59,22 @@ com.plazoleta.traceability
 │   └── exception    OrderLogsNotFoundException, ForbiddenOperationException, RestaurantNotFoundException,
 │                    IntegrationUnavailableException
 ├── application
+│   ├── handler      IOrderLogHandler, IEfficiencyHandler (+ implementación)
 │   ├── port/input   RecordOrderLogUseCase, GetOrderLogsUseCase, GetRestaurantEfficiencyUseCase
 │   ├── port/output  OrderLogRepositoryPort, RestaurantDirectoryPort
 │   ├── service      RecordOrderLogService, GetOrderLogsService, GetRestaurantEfficiencyService
 │   └── dto          RecordOrderLogCommand, OrderLogResponse, RestaurantEfficiencyResponse, ...
 └── infrastructure
-    ├── input/rest   InternalOrderLogController, OrderLogController, EfficiencyController, exceptionhandler
+    ├── input/rest   InternalOrderLogController, OrderLogController, EfficiencyController, dto, mapper,
+    │                exceptionhandler
     ├── output/mongo document, repository, adapter (MongoDB)
     ├── output/http  RemoteRestaurantDirectoryAdapter (dueño del restaurante)
     └── configuration BeanConfiguration, OpenApiConfiguration, security (lectura del JWT)
 ```
+
+Flujo de cada petición: `Controller` (solo HTTP: token interno o JWT, request DTO y mapper a comando) →
+`IXHandler` (aplicación: coordina y delega, sin reglas de negocio) → interfaz del caso de uso (`port/input`) →
+`Service` (toda la lógica) → puertos de salida → adaptadores.
 
 ## Cómo ejecutarlo
 

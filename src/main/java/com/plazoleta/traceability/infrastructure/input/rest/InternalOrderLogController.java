@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plazoleta.traceability.application.dto.OrderLogResponse;
-import com.plazoleta.traceability.application.dto.RecordOrderLogCommand;
-import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
+import com.plazoleta.traceability.application.handler.IOrderLogHandler;
+import com.plazoleta.traceability.infrastructure.input.rest.dto.RecordOrderLogRequest;
+import com.plazoleta.traceability.infrastructure.input.rest.mapper.OrderLogRequestMapper;
 import com.plazoleta.traceability.infrastructure.input.rest.exceptionhandler.UnauthorizedException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,12 +28,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/internal/order-logs")
 @Tag(name = "Order logs")
 public class InternalOrderLogController {
-    private final RecordOrderLogUseCase recordOrderLogUseCase;
+    private final IOrderLogHandler orderLogHandler;
     private final String internalToken;
 
-    public InternalOrderLogController(RecordOrderLogUseCase recordOrderLogUseCase,
+    public InternalOrderLogController(IOrderLogHandler orderLogHandler,
                                       @Value("${app.internal.token}") String internalToken) {
-        this.recordOrderLogUseCase = recordOrderLogUseCase;
+        this.orderLogHandler = orderLogHandler;
         this.internalToken = internalToken;
     }
 
@@ -40,7 +41,7 @@ public class InternalOrderLogController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "HU-17 Record an order status change",
             description = "Internal route. Needs the header Authorization: Bearer <internal token>.")
-    public OrderLogResponse record(@RequestBody RecordOrderLogCommand command,
+    public OrderLogResponse record(@RequestBody RecordOrderLogRequest request,
                                    @RequestHeader(name = "Authorization", required = false) String authorization) {
         String supplied = authorization != null && authorization.startsWith("Bearer ")
                 ? authorization.substring(7) : "";
@@ -49,6 +50,6 @@ public class InternalOrderLogController {
                         supplied.getBytes(StandardCharsets.UTF_8))) {
             throw new UnauthorizedException(MensajesError.CREDENCIALES_DE_SERVICIO_INVALIDAS);
         }
-        return recordOrderLogUseCase.execute(command);
+        return orderLogHandler.recordOrderLog(OrderLogRequestMapper.toCommand(request));
     }
 }

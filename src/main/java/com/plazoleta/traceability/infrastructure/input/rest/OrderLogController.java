@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plazoleta.traceability.application.dto.OrderLogResponse;
-import com.plazoleta.traceability.application.port.input.GetOrderLogsUseCase;
+import com.plazoleta.traceability.application.handler.IOrderLogHandler;
 import com.plazoleta.traceability.domain.exception.ForbiddenOperationException;
 import com.plazoleta.traceability.infrastructure.configuration.security.AuthenticatedUser;
 import com.plazoleta.traceability.infrastructure.configuration.security.JwtTokenReader;
@@ -26,11 +26,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api")
 @Tag(name = "Order logs")
 public class OrderLogController {
-    private final GetOrderLogsUseCase getOrderLogsUseCase;
+    private final IOrderLogHandler orderLogHandler;
     private final JwtTokenReader jwtTokenReader;
 
-    public OrderLogController(GetOrderLogsUseCase getOrderLogsUseCase, JwtTokenReader jwtTokenReader) {
-        this.getOrderLogsUseCase = getOrderLogsUseCase;
+    public OrderLogController(IOrderLogHandler orderLogHandler, JwtTokenReader jwtTokenReader) {
+        this.orderLogHandler = orderLogHandler;
         this.jwtTokenReader = jwtTokenReader;
     }
 
@@ -45,6 +45,6 @@ public class OrderLogController {
         if (!"CLIENTE".equals(user.role())) {
             throw new ForbiddenOperationException(MensajesError.SOLO_UN_CLIENTE_PUEDE_VER_EL_HISTORIAL);
         }
-        return getOrderLogsUseCase.execute(orderId, user.userId());
+        return orderLogHandler.getOrderLogs(orderId, user.userId());
     }
 }

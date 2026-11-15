@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plazoleta.traceability.application.dto.RestaurantEfficiencyResponse;
-import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyUseCase;
+import com.plazoleta.traceability.application.handler.IEfficiencyHandler;
 import com.plazoleta.traceability.domain.exception.ForbiddenOperationException;
 import com.plazoleta.traceability.infrastructure.configuration.security.AuthenticatedUser;
 import com.plazoleta.traceability.infrastructure.configuration.security.JwtTokenReader;
@@ -24,12 +24,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api")
 @Tag(name = "Efficiency")
 public class EfficiencyController {
-    private final GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase;
+    private final IEfficiencyHandler efficiencyHandler;
     private final JwtTokenReader jwtTokenReader;
 
-    public EfficiencyController(GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase,
+    public EfficiencyController(IEfficiencyHandler efficiencyHandler,
                                 JwtTokenReader jwtTokenReader) {
-        this.getRestaurantEfficiencyUseCase = getRestaurantEfficiencyUseCase;
+        this.efficiencyHandler = efficiencyHandler;
         this.jwtTokenReader = jwtTokenReader;
     }
 
@@ -46,6 +46,6 @@ public class EfficiencyController {
         if (!"PROPIETARIO".equals(user.role())) {
             throw new ForbiddenOperationException(MensajesError.SOLO_EL_PROPIETARIO_PUEDE_VER_LA_EFICIENCIA);
         }
-        return getRestaurantEfficiencyUseCase.execute(restaurantId, user.userId());
+        return efficiencyHandler.getRestaurantEfficiency(restaurantId, user.userId());
     }
 }

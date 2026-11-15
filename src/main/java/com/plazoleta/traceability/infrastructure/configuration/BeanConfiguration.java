@@ -5,6 +5,10 @@ import java.time.Clock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.plazoleta.traceability.application.handler.EfficiencyHandler;
+import com.plazoleta.traceability.application.handler.IEfficiencyHandler;
+import com.plazoleta.traceability.application.handler.IOrderLogHandler;
+import com.plazoleta.traceability.application.handler.OrderLogHandler;
 import com.plazoleta.traceability.application.port.input.GetOrderLogsUseCase;
 import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyUseCase;
 import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
@@ -40,5 +44,18 @@ public class BeanConfiguration {
     public GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase(OrderLogRepositoryPort logs,
                                                                          RestaurantDirectoryPort restaurants) {
         return new GetRestaurantEfficiencyService(logs, restaurants);
+    }
+
+    /** Handler de la HU-17 que usan los controladores del historial. */
+    @Bean
+    public IOrderLogHandler orderLogHandler(RecordOrderLogUseCase recordOrderLogUseCase,
+                                            GetOrderLogsUseCase getOrderLogsUseCase) {
+        return new OrderLogHandler(recordOrderLogUseCase, getOrderLogsUseCase);
+    }
+
+    /** Handler de la HU-18 que usa el controlador de eficiencia. */
+    @Bean
+    public IEfficiencyHandler efficiencyHandler(GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase) {
+        return new EfficiencyHandler(getRestaurantEfficiencyUseCase);
     }
 }
