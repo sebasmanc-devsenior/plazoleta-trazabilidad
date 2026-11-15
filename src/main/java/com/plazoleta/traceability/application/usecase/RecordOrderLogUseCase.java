@@ -1,4 +1,4 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import com.plazoleta.traceability.domain.util.MensajesError;
 
@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 
 import com.plazoleta.traceability.application.dto.OrderLogResponse;
 import com.plazoleta.traceability.application.dto.RecordOrderLogCommand;
-import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
+import com.plazoleta.traceability.application.port.input.RecordOrderLogPort;
 import com.plazoleta.traceability.application.port.output.OrderLogRepositoryPort;
 import com.plazoleta.traceability.domain.model.OrderLog;
 
-public class RecordOrderLogService implements RecordOrderLogUseCase {
+public class RecordOrderLogUseCase implements RecordOrderLogPort {
     private final OrderLogRepositoryPort orderLogRepositoryPort;
     private final Clock clock;
 
-    public RecordOrderLogService(OrderLogRepositoryPort orderLogRepositoryPort, Clock clock) {
+    public RecordOrderLogUseCase(OrderLogRepositoryPort orderLogRepositoryPort, Clock clock) {
         this.orderLogRepositoryPort = orderLogRepositoryPort;
         this.clock = clock;
     }

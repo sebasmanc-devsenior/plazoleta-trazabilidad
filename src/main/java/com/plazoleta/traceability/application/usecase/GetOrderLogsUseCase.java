@@ -1,20 +1,20 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import com.plazoleta.traceability.domain.util.MensajesError;
 
 import java.util.List;
 
 import com.plazoleta.traceability.application.dto.OrderLogResponse;
-import com.plazoleta.traceability.application.port.input.GetOrderLogsUseCase;
+import com.plazoleta.traceability.application.port.input.GetOrderLogsPort;
 import com.plazoleta.traceability.application.port.output.OrderLogRepositoryPort;
 import com.plazoleta.traceability.domain.exception.ForbiddenOperationException;
 import com.plazoleta.traceability.domain.exception.OrderLogsNotFoundException;
 import com.plazoleta.traceability.domain.model.OrderLog;
 
-public class GetOrderLogsService implements GetOrderLogsUseCase {
+public class GetOrderLogsUseCase implements GetOrderLogsPort {
     private final OrderLogRepositoryPort orderLogRepositoryPort;
 
-    public GetOrderLogsService(OrderLogRepositoryPort orderLogRepositoryPort) {
+    public GetOrderLogsUseCase(OrderLogRepositoryPort orderLogRepositoryPort) {
         this.orderLogRepositoryPort = orderLogRepositoryPort;
     }
 
