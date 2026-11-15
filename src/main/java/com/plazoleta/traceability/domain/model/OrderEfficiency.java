@@ -1,5 +1,7 @@
 package com.plazoleta.traceability.domain.model;
 
+import com.plazoleta.traceability.domain.util.MensajesError;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,10 +19,10 @@ public class OrderEfficiency {
 
     public OrderEfficiency(Long orderId, Long employeeId, LocalDateTime startedAt, LocalDateTime finishedAt) {
         if (orderId == null || startedAt == null || finishedAt == null) {
-            throw new IllegalArgumentException("El pedido, el inicio y el fin son obligatorios");
+            throw new IllegalArgumentException(MensajesError.PEDIDO_EL_INICIO_Y_EL_FIN_SON);
         }
         if (finishedAt.isBefore(startedAt)) {
-            throw new IllegalArgumentException("Un pedido no puede terminar antes de empezar");
+            throw new IllegalArgumentException(MensajesError.PEDIDO_NO_PUEDE_TERMINAR_ANTES_DE_EMPEZAR);
         }
         this.orderId = orderId;
         this.employeeId = employeeId;
