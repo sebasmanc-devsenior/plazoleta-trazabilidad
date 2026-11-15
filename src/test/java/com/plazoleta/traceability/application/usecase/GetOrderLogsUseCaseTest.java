@@ -1,4 +1,4 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,11 +21,11 @@ import com.plazoleta.traceability.domain.model.OrderLog;
 
 /** HU-17, criterio 2: cada cliente consulta el historial solo de sus propios pedidos. */
 @ExtendWith(MockitoExtension.class)
-class GetOrderLogsServiceTest {
+class GetOrderLogsUseCaseTest {
     @Mock
     private OrderLogRepositoryPort orderLogRepositoryPort;
     @InjectMocks
-    private GetOrderLogsService service;
+    private GetOrderLogsUseCase service;
 
     private static OrderLog log(String previous, String next, int minute, Long employeeId) {
         return new OrderLog("id" + minute, 5L, 7L, 1L, employeeId, previous, next,

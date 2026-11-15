@@ -1,4 +1,4 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +29,7 @@ import com.plazoleta.traceability.domain.model.OrderLog;
 
 /** HU-18: Consultar la eficiencia de los pedidos. */
 @ExtendWith(MockitoExtension.class)
-class GetRestaurantEfficiencyServiceTest {
+class GetRestaurantEfficiencyUseCaseTest {
     private static final Long RESTAURANT_ID = 1L;
     private static final Long OWNER_ID = 2L;
     private static final LocalDateTime T0 = LocalDateTime.of(2026, 11, 13, 12, 0);
@@ -39,7 +39,7 @@ class GetRestaurantEfficiencyServiceTest {
     @Mock
     private RestaurantDirectoryPort restaurantDirectoryPort;
     @InjectMocks
-    private GetRestaurantEfficiencyService service;
+    private GetRestaurantEfficiencyUseCase service;
 
     private static OrderLog log(long orderId, Long employeeId, String previous, String next, int seconds) {
         return new OrderLog(null, orderId, 7L, RESTAURANT_ID, employeeId, previous, next, T0.plusSeconds(seconds));

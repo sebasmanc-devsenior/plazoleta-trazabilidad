@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 import com.plazoleta.traceability.application.dto.OrderLogResponse;
 import com.plazoleta.traceability.application.dto.RecordOrderLogCommand;
 import com.plazoleta.traceability.application.dto.RestaurantEfficiencyResponse;
-import com.plazoleta.traceability.application.port.input.GetOrderLogsUseCase;
-import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyUseCase;
-import com.plazoleta.traceability.application.port.input.RecordOrderLogUseCase;
+import com.plazoleta.traceability.application.port.input.GetOrderLogsPort;
+import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyPort;
+import com.plazoleta.traceability.application.port.input.RecordOrderLogPort;
 
 /** Los handlers no deciden nada: pasan los datos al caso de uso y devuelven su respuesta. */
 class HandlersTest {
-    private final RecordOrderLogUseCase recordOrderLogUseCase = mock(RecordOrderLogUseCase.class);
-    private final GetOrderLogsUseCase getOrderLogsUseCase = mock(GetOrderLogsUseCase.class);
-    private final GetRestaurantEfficiencyUseCase getRestaurantEfficiencyUseCase =
-            mock(GetRestaurantEfficiencyUseCase.class);
+    private final RecordOrderLogPort recordOrderLogUseCase = mock(RecordOrderLogPort.class);
+    private final GetOrderLogsPort getOrderLogsUseCase = mock(GetOrderLogsPort.class);
+    private final GetRestaurantEfficiencyPort getRestaurantEfficiencyUseCase =
+            mock(GetRestaurantEfficiencyPort.class);
     private final OrderLogHandler orderLogHandler = new OrderLogHandler(recordOrderLogUseCase, getOrderLogsUseCase);
     private final EfficiencyHandler efficiencyHandler = new EfficiencyHandler(getRestaurantEfficiencyUseCase);
 
