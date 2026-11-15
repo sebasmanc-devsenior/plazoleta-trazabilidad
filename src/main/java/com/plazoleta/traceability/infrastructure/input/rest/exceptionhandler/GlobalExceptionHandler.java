@@ -63,6 +63,18 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.SERVICE_UNAVAILABLE, MensajesError.BASE_DE_DATOS_DE_TRAZABILIDAD_NO_ESTA, request);
     }
 
+    /** Error no previsto: 500 con el formato del proyecto y sin detalles internos (el detalle queda en el log). */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex, HttpServletRequest request) {
+        if (ex instanceof org.springframework.web.ErrorResponse frameworkError) {
+            HttpStatus status = HttpStatus.valueOf(frameworkError.getStatusCode().value());
+            return build(status, status == HttpStatus.NOT_FOUND ? MensajesError.RUTA_NO_EXISTE
+                    : MensajesError.PETICION_NO_SOPORTADA, request);
+        }
+        log.error("Unexpected error at {}", request.getRequestURI(), ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, MensajesError.ERROR_INTERNO_DEL_SERVIDOR, request);
+    }
+
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request) {
         return ResponseEntity.status(status).body(new ErrorResponse(Instant.now(), status.value(),
                 status.getReasonPhrase(), message, request.getRequestURI()));

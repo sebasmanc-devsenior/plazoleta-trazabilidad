@@ -25,6 +25,9 @@ public final class MensajesError {
     public static final String SERVICIO_DE_RESTAURANTES_RECHAZO_LA_CONSULTA_HTTP = "El servicio de restaurantes rechazó la consulta (HTTP ";
     public static final String SOLO_EL_PROPIETARIO_PUEDE_VER_LA_EFICIENCIA = "Solo el propietario puede ver la eficiencia de un restaurante";
     public static final String SOLO_UN_CLIENTE_PUEDE_VER_EL_HISTORIAL = "Solo un cliente puede ver el historial de un pedido";
+    public static final String ERROR_INTERNO_DEL_SERVIDOR = "Error interno del servidor";
+    public static final String RUTA_NO_EXISTE = "La ruta solicitada no existe";
+    public static final String PETICION_NO_SOPORTADA = "La petición no se puede procesar con ese método o formato";
 
     private MensajesError() {
     }
