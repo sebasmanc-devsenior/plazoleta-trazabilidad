@@ -44,10 +44,10 @@ public class RemoteRestaurantDirectoryAdapter implements RestaurantDirectoryPort
             if (ex.getStatusCode().value() == 404) {
                 return Optional.empty();
             }
-            throw new IntegrationUnavailableException("Restaurants service rejected the lookup (HTTP "
+            throw new IntegrationUnavailableException("El servicio de restaurantes rechazó la consulta (HTTP "
                     + ex.getStatusCode().value() + ")", ex);
         } catch (RestClientException ex) {
-            throw new IntegrationUnavailableException("Restaurants service is unavailable", ex);
+            throw new IntegrationUnavailableException("El servicio de restaurantes no está disponible", ex);
         }
     }
 

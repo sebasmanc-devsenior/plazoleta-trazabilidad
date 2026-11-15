@@ -39,9 +39,9 @@ public class OrderLogController {
     public List<OrderLogResponse> getOrderLogs(@PathVariable Long orderId,
             @Parameter(hidden = true) @RequestHeader(name = "Authorization", required = false) String authorization) {
         AuthenticatedUser user = jwtTokenReader.read(authorization)
-                .orElseThrow(() -> new UnauthorizedException("A valid token is required"));
+                .orElseThrow(() -> new UnauthorizedException("Se requiere un token válido"));
         if (!"CLIENTE".equals(user.role())) {
-            throw new ForbiddenOperationException("Only a client can see the history of an order");
+            throw new ForbiddenOperationException("Solo un cliente puede ver el historial de un pedido");
         }
         return getOrderLogsUseCase.execute(orderId, user.userId());
     }

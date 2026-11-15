@@ -16,19 +16,19 @@ public class OrderLog {
     public OrderLog(String id, Long orderId, Long clientId, Long restaurantId, Long employeeId,
                     String previousStatus, String newStatus, LocalDateTime changedAt) {
         if (orderId == null) {
-            throw new IllegalArgumentException("Order is required");
+            throw new IllegalArgumentException("El pedido es obligatorio");
         }
         if (clientId == null) {
-            throw new IllegalArgumentException("Client is required");
+            throw new IllegalArgumentException("El cliente es obligatorio");
         }
         if (restaurantId == null) {
-            throw new IllegalArgumentException("Restaurant is required");
+            throw new IllegalArgumentException("El restaurante es obligatorio");
         }
         if (newStatus == null || newStatus.isBlank()) {
-            throw new IllegalArgumentException("New status is required");
+            throw new IllegalArgumentException("El estado nuevo es obligatorio");
         }
         if (changedAt == null) {
-            throw new IllegalArgumentException("Change date is required");
+            throw new IllegalArgumentException("La fecha del cambio es obligatoria");
         }
         this.id = id;
         this.orderId = orderId;

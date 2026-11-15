@@ -45,7 +45,7 @@ public class InternalOrderLogController {
         if (internalToken == null || internalToken.isBlank()
                 || !MessageDigest.isEqual(internalToken.getBytes(StandardCharsets.UTF_8),
                         supplied.getBytes(StandardCharsets.UTF_8))) {
-            throw new UnauthorizedException("Invalid service credentials");
+            throw new UnauthorizedException("Credenciales de servicio inválidas");
         }
         return recordOrderLogUseCase.execute(command);
     }

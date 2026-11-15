@@ -21,7 +21,7 @@ public class RecordOrderLogService implements RecordOrderLogUseCase {
     @Override
     public OrderLogResponse execute(RecordOrderLogCommand command) {
         if (command == null) {
-            throw new IllegalArgumentException("Request body is required");
+            throw new IllegalArgumentException("El cuerpo de la petición es obligatorio");
         }
         // La fecha la pone este servicio al recibir el cambio: todos los registros usan el mismo reloj.
         OrderLog log = new OrderLog(null, command.getOrderId(), command.getClientId(), command.getRestaurantId(),

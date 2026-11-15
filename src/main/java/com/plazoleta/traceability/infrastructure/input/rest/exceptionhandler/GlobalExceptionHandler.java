@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponse> handleMalformed(Exception ex, HttpServletRequest request) {
-        return build(HttpStatus.BAD_REQUEST, "Request is malformed", request);
+        return build(HttpStatus.BAD_REQUEST, "La petición está mal formada", request);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse> handleDatabase(DataAccessException ex, HttpServletRequest request) {
         log.warn("MongoDB is unavailable at {}: {}", request.getRequestURI(), ex.getMessage());
-        return build(HttpStatus.SERVICE_UNAVAILABLE, "The traceability database is unavailable", request);
+        return build(HttpStatus.SERVICE_UNAVAILABLE, "La base de datos de trazabilidad no está disponible", request);
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request) {

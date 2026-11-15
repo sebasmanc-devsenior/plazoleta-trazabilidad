@@ -33,9 +33,9 @@ public class GetRestaurantEfficiencyService implements GetRestaurantEfficiencyUs
     public RestaurantEfficiencyResponse execute(Long restaurantId, Long ownerId) {
         // Conexión con el microservicio de restaurantes: solo el dueño ve la eficiencia de su restaurante.
         Long realOwnerId = restaurantDirectoryPort.findOwnerId(restaurantId)
-                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant was not found"));
+                .orElseThrow(() -> new RestaurantNotFoundException("El restaurante no existe"));
         if (!realOwnerId.equals(ownerId)) {
-            throw new ForbiddenOperationException("The restaurant belongs to another owner");
+            throw new ForbiddenOperationException("El restaurante pertenece a otro propietario");
         }
 
         // Criterio 1: tiempo de cada pedido entregado, desde PENDIENTE hasta ENTREGADO.

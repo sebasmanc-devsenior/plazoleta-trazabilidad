@@ -40,9 +40,9 @@ public class EfficiencyController {
     public RestaurantEfficiencyResponse getEfficiency(@PathVariable Long restaurantId,
             @Parameter(hidden = true) @RequestHeader(name = "Authorization", required = false) String authorization) {
         AuthenticatedUser user = jwtTokenReader.read(authorization)
-                .orElseThrow(() -> new UnauthorizedException("A valid token is required"));
+                .orElseThrow(() -> new UnauthorizedException("Se requiere un token válido"));
         if (!"PROPIETARIO".equals(user.role())) {
-            throw new ForbiddenOperationException("Only the owner can see the efficiency of a restaurant");
+            throw new ForbiddenOperationException("Solo el propietario puede ver la eficiencia de un restaurante");
         }
         return getRestaurantEfficiencyUseCase.execute(restaurantId, user.userId());
     }
