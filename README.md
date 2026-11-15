@@ -67,7 +67,7 @@ com.plazoleta.traceability
 └── infrastructure
     ├── input/rest   InternalOrderLogController, OrderLogController, EfficiencyController, dto, mapper,
     │                exceptionhandler
-    ├── output/mongo document, repository, adapter (MongoDB)
+    ├── output/mongo document, repository, mapper (documento ↔ dominio), adapter (MongoDB)
     ├── output/http  RemoteRestaurantDirectoryAdapter (dueño del restaurante)
     └── configuration BeanConfiguration, OpenApiConfiguration, security (lectura del JWT)
 ```
