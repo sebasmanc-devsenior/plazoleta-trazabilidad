@@ -1,4 +1,4 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,17 +26,17 @@ import com.plazoleta.traceability.domain.model.OrderLog;
 
 /** HU-17, criterio 1: se crea un registro por cada cambio de estado de un pedido. */
 @ExtendWith(MockitoExtension.class)
-class RecordOrderLogServiceTest {
+class RecordOrderLogUseCaseTest {
     private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-11-12T17:00:00Z"), ZoneId.of("America/Bogota"));
 
     @Mock
     private OrderLogRepositoryPort orderLogRepositoryPort;
 
-    private RecordOrderLogService service;
+    private RecordOrderLogUseCase service;
 
     @BeforeEach
     void setUp() {
-        service = new RecordOrderLogService(orderLogRepositoryPort, CLOCK);
+        service = new RecordOrderLogUseCase(orderLogRepositoryPort, CLOCK);
     }
 
     @Test

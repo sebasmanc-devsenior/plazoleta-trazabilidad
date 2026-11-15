@@ -60,9 +60,9 @@ com.plazoleta.traceability
 │                    IntegrationUnavailableException
 ├── application
 │   ├── handler      IOrderLogHandler, IEfficiencyHandler (+ implementación)
-│   ├── port/input   RecordOrderLogUseCase, GetOrderLogsUseCase, GetRestaurantEfficiencyUseCase
+│   ├── port/input   puertos de entrada (interfaces): RecordOrderLogPort, GetOrderLogsPort, GetRestaurantEfficiencyPort
 │   ├── port/output  OrderLogRepositoryPort, RestaurantDirectoryPort
-│   ├── service      RecordOrderLogService, GetOrderLogsService, GetRestaurantEfficiencyService
+│   ├── usecase      casos de uso, clases concretas con toda la lógica: RecordOrderLogUseCase, GetOrderLogsUseCase, GetRestaurantEfficiencyUseCase
 │   └── dto          RecordOrderLogCommand, OrderLogResponse, RestaurantEfficiencyResponse, ...
 └── infrastructure
     ├── input/rest   InternalOrderLogController, OrderLogController, EfficiencyController, dto, mapper,
@@ -73,8 +73,8 @@ com.plazoleta.traceability
 ```
 
 Flujo de cada petición: `Controller` (solo HTTP: token interno o JWT, request DTO y mapper a comando) →
-`IXHandler` (aplicación: coordina y delega, sin reglas de negocio) → interfaz del caso de uso (`port/input`) →
-`Service` (toda la lógica) → puertos de salida → adaptadores.
+`IXHandler` (aplicación: coordina y delega, sin reglas de negocio) → puerto de entrada (`port/input`, interfaz) →
+caso de uso (`usecase`, clase concreta con toda la lógica) → puertos de salida → adaptadores.
 
 ## Cómo ejecutarlo
 

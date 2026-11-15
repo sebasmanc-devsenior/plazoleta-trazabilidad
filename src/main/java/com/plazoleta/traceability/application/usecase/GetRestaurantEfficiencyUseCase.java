@@ -1,4 +1,4 @@
-package com.plazoleta.traceability.application.service;
+package com.plazoleta.traceability.application.usecase;
 
 import com.plazoleta.traceability.domain.util.MensajesError;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import com.plazoleta.traceability.application.dto.EmployeeRankingResponse;
 import com.plazoleta.traceability.application.dto.OrderEfficiencyResponse;
 import com.plazoleta.traceability.application.dto.RestaurantEfficiencyResponse;
-import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyUseCase;
+import com.plazoleta.traceability.application.port.input.GetRestaurantEfficiencyPort;
 import com.plazoleta.traceability.application.port.output.OrderLogRepositoryPort;
 import com.plazoleta.traceability.application.port.output.RestaurantDirectoryPort;
 import com.plazoleta.traceability.domain.exception.ForbiddenOperationException;
@@ -21,11 +21,11 @@ import com.plazoleta.traceability.domain.model.EmployeeEfficiency;
 import com.plazoleta.traceability.domain.model.OrderEfficiency;
 import com.plazoleta.traceability.domain.model.OrderLog;
 
-public class GetRestaurantEfficiencyService implements GetRestaurantEfficiencyUseCase {
+public class GetRestaurantEfficiencyUseCase implements GetRestaurantEfficiencyPort {
     private final OrderLogRepositoryPort orderLogRepositoryPort;
     private final RestaurantDirectoryPort restaurantDirectoryPort;
 
-    public GetRestaurantEfficiencyService(OrderLogRepositoryPort orderLogRepositoryPort,
+    public GetRestaurantEfficiencyUseCase(OrderLogRepositoryPort orderLogRepositoryPort,
                                           RestaurantDirectoryPort restaurantDirectoryPort) {
         this.orderLogRepositoryPort = orderLogRepositoryPort;
         this.restaurantDirectoryPort = restaurantDirectoryPort;
